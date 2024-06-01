@@ -94,16 +94,12 @@ public class Config {
 					if(value.getName().equals(name)) {
 						if(value instanceof IntValue intval) {
 							intval.set(json.nextInt());
-							System.out.println(value.get());
 						} else if(value instanceof DoubleValue dval) {
 							dval.set(json.nextDouble());
-							System.out.println(value.get());
 						} else if(value instanceof BooleanValue bval) {
 							bval.set(json.nextBoolean());
-							System.out.println(value.get());
 						} else if(value instanceof EnumValue eval) {
 							eval.set(eval.getValueByName(json.nextString()));
-							System.out.println(value.get());
 						}
 					}
 				}
@@ -119,6 +115,7 @@ public class Config {
 	}
 
 	public static class Builder {
+		
 		private String id = "";
 		private List<ConfigValue<?>> values = new ArrayList<>();
 		
