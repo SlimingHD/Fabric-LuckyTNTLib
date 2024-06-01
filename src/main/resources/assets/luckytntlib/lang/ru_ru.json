@@ -1,4 +1,5 @@
 {
+	"item.luckytntlib.tnt_config": "Настройки Динамита",
 	"config.title" : "Настройки Lucky TNT Lib",
 	"config.reset" : "Сбросить",
 	"config.performant_explosion" : "Улучшенный Взрыв",
