@@ -18,7 +18,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 
 /**
- *
  * The LDynamiteRenderer is similar to the {@link FlyingItemEntityRenderer}, but the item is also scaled by using
  * the size given by the {@link PrimedTNTEffect} of the {@link LExplosiveProjectile}.
  * @param <T>  is an instance of {@link LExplosiveProjectile} and implements {@link FlyingItemEntity}

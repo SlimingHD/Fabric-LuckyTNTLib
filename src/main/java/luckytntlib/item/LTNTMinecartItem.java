@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 /**
- * 
  * The LTNTMinecartItem is an important step in making a custom TNT minecart.
  * It can be used to spawn a {@link LTNTMinecart} onto rails.
  * If a {@link DispenserBehavior} has been registered dispensers can also spawn the minecart.

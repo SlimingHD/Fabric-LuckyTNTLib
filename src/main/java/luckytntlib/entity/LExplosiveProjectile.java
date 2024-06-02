@@ -21,7 +21,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * 
  * The LExplosiveProjectile is an extension of Minecraft's {@link PersistentProjectileEntity} 
  * and represents a projectile that holds a {@link PrimedTNTEffect}.
  * Unlike a {@link PrimedLTNT} a LExplosiveProjectile has access to other types of logic specifically designed

@@ -14,7 +14,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * 
  * A PrimedLTNT is an extension of Minecraft's {@link TntEntity}
  * and uses a {@link PrimedTNTEffect} to easily customize the explosion effect and other parameters.
  * It implements {@link IExplosiveEntity}.

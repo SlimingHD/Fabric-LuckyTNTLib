@@ -9,11 +9,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * 
  * IExplosiveEntity is implemented by all entities introduced by Lucky TNT Lib.
  * <p>
- * IExplosiveEntity is required because, for the most part, Minecraft's entities qualify as explosive entities but are not interchangeable.
- * Example given {@link LivingEntity}, {@link TntEntity} and {@link PersistentProjectileEntity}.
+ * IExplosiveEntity is required because most of Minecraft's entities qualify as explosive entities but are not interchangeable.
+ * Examples are {@link LivingEntity}, {@link TntEntity} and {@link PersistentProjectileEntity}.
  * <p>
  * It is advised to use methods given by this Interface rather than Minecraft's methods to make porting easier and to increase universalness.
  * @implNote Only entities implementing this Interface are capeable of using anything extending upon {@link PrimedTNTEffect}

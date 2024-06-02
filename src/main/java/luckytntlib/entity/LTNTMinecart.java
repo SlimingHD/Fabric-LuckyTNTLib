@@ -32,7 +32,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 /**
- * 
  * The LTNTMinecart is an extension of Minecraft's {@link AbstractMinecartEntity}
  * and can hold an already existing {@link PrimedLTNT} and its {@link PrimedTNTEffect}.
  * It implements {@link IExplosiveEntity}.

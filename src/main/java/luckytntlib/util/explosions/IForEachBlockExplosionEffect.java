@@ -5,7 +5,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * 
  * An IForEachEntityExplosionEffect is used to affect individual blocks gotten by an {@link ImprovedExplosion} 
  * or a function of the {@link ExplosionHelper} in different ways.
  * It is usually used as a parameter of a function.

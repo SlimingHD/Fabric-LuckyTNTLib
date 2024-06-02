@@ -1,5 +1,8 @@
 package luckytntlib.registry;
 
+/**
+ * Registers the Config Item, which can be used to add your own config screens
+ */
 import java.util.function.Supplier;
 
 import luckytntlib.LuckyTNTLib;
