@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import luckytntlib.block.LTNTBlock;
-import luckytntlib.block.LivingLTNTBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 /**
- * This Mixin ensures that TNT is turning into the correct TNT
+ * This Mixin ensures that TNT is turning into the correct TNT when it's lit by fire
  */
 @Mixin(FireBlock.class)
 public abstract class FireBlockMixin {
@@ -51,8 +50,6 @@ public abstract class FireBlockMixin {
             if (block instanceof TntBlock tnt) {
             	if(tnt instanceof LTNTBlock ltnt) {
     				ltnt.explode(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
-    			} else if(tnt instanceof LivingLTNTBlock ltnt) {
-    				ltnt.explodus(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
     			} else {
                 	TntBlock.primeTnt(world, pos);
     			}

@@ -22,6 +22,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.CandleBlock;
 import net.minecraft.block.CandleCakeBlock;
@@ -34,10 +35,8 @@ import net.minecraft.block.enums.RailShape;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPointer;
@@ -48,8 +47,6 @@ import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.explosion.Explosion.DestructionType;
 
 public class LuckyTNTLib implements ModInitializer {
     
@@ -91,8 +88,12 @@ public class LuckyTNTLib implements ModInitializer {
 					world.setBlockState(blockPos, (BlockState) blockState.with(Properties.LIT, true));
 					world.emitGameEvent(null, GameEvent.BLOCK_CHANGE, blockPos);
 				} else if (blockState.getBlock() instanceof TntBlock tnt) {
-					tnt.onDestroyedByExplosion(world, blockPos, new Explosion(world, null, null, null, 0, 0, 0, 0, false, DestructionType.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE));
-					world.removeBlock(blockPos, false);
+					if(tnt instanceof LTNTBlock ltnt) {
+	    				ltnt.explode(world, false, blockPos.getX(), blockPos.getY(), blockPos.getZ(), null);
+	    			} else {
+	                	TntBlock.primeTnt(world, blockPos);
+	    			}
+					world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
 				} else {
 					setSuccess(false);
 				}
