@@ -53,13 +53,12 @@ public abstract class FireBlockMixin {
             }
             
             if (block instanceof TntBlock tnt) {
-            	Explosion explosion = new Explosion(world, null, null, null, 0, 0, 0, 0, false, DestructionType.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE);
-    			if(tnt instanceof LTNTBlock ltnt) {
+            	if(tnt instanceof LTNTBlock ltnt) {
     				ltnt.explode(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
     			} else if(tnt instanceof LivingLTNTBlock ltnt) {
     				ltnt.explodus(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
     			} else {
-                	tnt.onDestroyedByExplosion(world, pos, explosion);
+                	TntBlock.primeTnt(world, pos);
     			}
     			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
             }
