@@ -26,7 +26,7 @@ public class Config {
 	}
 	
 	public void init() {
-		Path path = FabricLoader.getInstance().getConfigDir().toAbsolutePath();
+		Path path = FabricLoader.getInstance().getConfigDir();
 		File file = new File(path.toString() + "\\" + modid + "-config.json");
 		
 		if(!file.exists()) {
@@ -37,7 +37,7 @@ public class Config {
 	}
 	
 	public void save() {
-		Path path = FabricLoader.getInstance().getConfigDir().toAbsolutePath();
+		Path path = FabricLoader.getInstance().getConfigDir();
 		File file = new File(path.toString() + "\\" + modid + "-config.json");
 		
 		if(!file.exists()) {
