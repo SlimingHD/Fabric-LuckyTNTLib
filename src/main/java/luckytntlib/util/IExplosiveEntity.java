@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -82,4 +83,11 @@ public interface IExplosiveEntity {
 	 * @return the Owner
 	 */
 	public LivingEntity owner();
+	
+	/**
+	 * Gets the synchronized {@link NbtCompound} that contains any custom data that is being saved
+	 * 
+	 * @return the synchronized data
+	 */
+	public NbtCompound getPersistentData();
 }

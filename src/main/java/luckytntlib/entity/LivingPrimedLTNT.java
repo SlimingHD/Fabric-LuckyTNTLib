@@ -31,6 +31,7 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 	private LivingEntity igniter;
 	private PrimedTNTEffect effect;
 	private static final TrackedData<Integer> DATA_FUSE_ID = DataTracker.registerData(LivingPrimedLTNT.class, TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<NbtCompound> PERSISTENT_DATA = DataTracker.registerData(LivingPrimedLTNT.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 	
 	public LivingPrimedLTNT(EntityType<? extends PathAwareEntity> type, World level, @Nullable PrimedTNTEffect effect) {
 		super(type, level);
@@ -47,6 +48,7 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 	@Override
 	public void initDataTracker() {
 		dataTracker.startTracking(DATA_FUSE_ID, -1);
+		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
 		super.initDataTracker();
 	}
 	
@@ -141,5 +143,10 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 	@Override
 	public LivingEntity owner() {
 		return igniter;
+	}
+
+	@Override
+	public NbtCompound getPersistentData() {
+		return dataTracker.get(PERSISTENT_DATA);
 	}
 }
