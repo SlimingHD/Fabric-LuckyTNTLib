@@ -27,7 +27,7 @@ public class LTNTBlockEntity extends BlockEntity {
 		persistentData = nbt.getCompound(PERSISTENT_DATA_TAG);
 	}
 	
-	public NbtCompound getPresistentData() {
+	public NbtCompound getPersistentData() {
 		return persistentData;
 	}
 }
