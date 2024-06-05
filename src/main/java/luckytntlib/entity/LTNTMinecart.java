@@ -201,6 +201,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 			tag.putInt("placerID", placer.getId());
 		}
 		tag.putShort("Fuse", (short)getTNTFuse());
+		tag.put("PersistentData", getPersistentData());
 		super.writeCustomDataToNbt(tag);
 	}
 	
@@ -210,6 +211,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 			placer = lEnt;
 		}
 		setTNTFuse(tag.getShort("Fuse"));
+		setPersistentData(tag.getCompound("PersistentData"));
 		super.readCustomDataFromNbt(tag);
 	}
 	
@@ -274,5 +276,10 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	@Override
 	public NbtCompound getPersistentData() {
 		return dataTracker.get(PERSISTENT_DATA);
+	}
+
+	@Override
+	public void setPersistentData(NbtCompound tag) {
+		dataTracker.set(PERSISTENT_DATA, tag);
 	}
 }

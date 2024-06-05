@@ -84,6 +84,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 			tag.putInt("throwerID", thrower.getId());
 		}
 		tag.putShort("Fuse", (short)getTNTFuse());
+		tag.put("PersistentData", getPersistentData());
 		super.writeCustomDataToNbt(tag);
 	}
 	
@@ -93,6 +94,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 			thrower = lEnt;
 		}
 		setTNTFuse(tag.getShort("Fuse"));
+		setPersistentData(tag.getCompound("PersistentData"));
 		super.readCustomDataFromNbt(tag);
 	}
 	
@@ -181,5 +183,10 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	@Override
 	public NbtCompound getPersistentData() {
 		return dataTracker.get(PERSISTENT_DATA);
+	}
+
+	@Override
+	public void setPersistentData(NbtCompound tag) {
+		dataTracker.set(PERSISTENT_DATA, tag);
 	}
 }

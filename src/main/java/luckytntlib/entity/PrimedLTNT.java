@@ -81,6 +81,7 @@ public class PrimedLTNT extends TntEntity implements IExplosiveEntity{
 		if(igniter != null) {
 			tag.putInt("igniterID", igniter.getId());
 		}
+		tag.put("PersistentData", getPersistentData());
 		super.writeCustomDataToNbt(tag);
 	}
 	
@@ -89,6 +90,7 @@ public class PrimedLTNT extends TntEntity implements IExplosiveEntity{
 		if(getWorld().getEntityById(tag.getInt("igniterID")) instanceof LivingEntity lEnt) {
 			igniter = lEnt;
 		}
+		setPersistentData(tag.getCompound("PersistentData"));
 		super.readCustomDataFromNbt(tag);
 	}
 	
@@ -140,5 +142,10 @@ public class PrimedLTNT extends TntEntity implements IExplosiveEntity{
 	@Override
 	public NbtCompound getPersistentData() {
 		return dataTracker.get(PERSISTENT_DATA);
+	}
+
+	@Override
+	public void setPersistentData(NbtCompound tag) {
+		dataTracker.set(PERSISTENT_DATA, tag);
 	}
 }

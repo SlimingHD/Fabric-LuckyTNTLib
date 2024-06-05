@@ -90,4 +90,11 @@ public interface IExplosiveEntity {
 	 * @return the synchronized data
 	 */
 	public NbtCompound getPersistentData();
+	
+	/**
+	 * Sets the synchronized {@link NbtCompound} that contains any custom data that is being saved
+	 * 
+	 * @param tag  the synchronized data
+	 */
+	public void setPersistentData(NbtCompound tag);
 }
