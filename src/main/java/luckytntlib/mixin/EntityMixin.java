@@ -34,22 +34,21 @@ public abstract class EntityMixin implements LuckyTNTEntityExtension {
 	
 	@Inject(method = "readNbt", at = @At("HEAD"))
 	private void injectionReadNbt(NbtCompound tag, CallbackInfo info) {
-		NbtCompound data = tag.getCompound("PersistentData");
-		setPersistentData(data);
+		setAdditionalPersistentData(tag.getCompound("PersistentData"));
 	}
 	
 	@Inject(method = "writeNbt", at = @At("HEAD"))
 	private void injectionWriteNbt(NbtCompound tag, CallbackInfoReturnable<NbtCompound> info) {
-		tag.put("PersistentData", getPersistentData());
+		tag.put("PersistentData", getAdditionalPersistentData());
 	}
 
 	@Unique
-	public NbtCompound getPersistentData() {
+	public NbtCompound getAdditionalPersistentData() {
 		return dataTracker.get(PERSISTENT_DATA);
 	}
 
 	@Unique
-	public void setPersistentData(NbtCompound nbt) {
+	public void setAdditionalPersistentData(NbtCompound nbt) {
 		dataTracker.set(PERSISTENT_DATA, nbt);
 	}
 }

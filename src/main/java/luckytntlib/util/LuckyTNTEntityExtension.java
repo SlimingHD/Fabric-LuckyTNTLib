@@ -3,7 +3,7 @@ package luckytntlib.util;
 import net.minecraft.nbt.NbtCompound;
 
 public interface LuckyTNTEntityExtension {
-	NbtCompound getPersistentData();
+	NbtCompound getAdditionalPersistentData();
 	
-	void setPersistentData(NbtCompound nbt);
+	void setAdditionalPersistentData(NbtCompound nbt);
 }
