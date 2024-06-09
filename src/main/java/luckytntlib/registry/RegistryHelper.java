@@ -21,7 +21,10 @@ import luckytntlib.entity.PrimedLTNT;
 import luckytntlib.item.LDynamiteItem;
 import luckytntlib.item.LTNTMinecartItem;
 import luckytntlib.item.LuckyDynamiteItem;
+import luckytntlib.network.LuckyTNTPacket;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
@@ -35,6 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -121,6 +125,41 @@ public class RegistryHelper {
 	 */
 	public void registerConfigScreenFactory(Text name, ConfigScreenFactory screenFactory) {
 		configScreens.add(Pair.of(name, screenFactory));
+	}
+	
+	/**
+	 * Registeres a new packet that is meant to be sent from the server to the client
+	 * @param packetName  the {@link Identifier} that represents the name of the packet
+	 * @param packetHandler  the {@link net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler} that will handle the packet once it's recieved
+	 */
+	public void registerS2CPacket(Identifier packetName, net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler packetHandler) {
+		ClientPlayNetworking.registerGlobalReceiver(packetName, packetHandler);
+	}
+	
+	/**
+	 * Registeres a new packet that is meant to be sent from the client to the server
+	 * @param packetName  the {@link Identifier} that represents the name of the packet
+	 * @param packetHandler  the {@link net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler} that will handle the packet once it's recieved
+	 */
+	public void registerC2SPacket(Identifier packetName, net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler packetHandler) {
+		ServerPlayNetworking.registerGlobalReceiver(packetName, packetHandler);
+	}
+	
+	/**
+	 * Sends a packet from the server to the client
+	 * @param player  the player to whose client the packet is sent
+	 * @param packet  the {@link LuckyTNTPacket} that is being sent
+	 */
+	public void sendS2CPacket(ServerPlayerEntity player, LuckyTNTPacket packet) {
+		ServerPlayNetworking.send(player, packet.getName(), packet.toByteBuf());
+	}
+	
+	/**
+	 * Sends a packet from the client to the server
+	 * @param packet  the {@link LuckyTNTPacket} that is being sent
+	 */
+	public void sendC2SPacket(LuckyTNTPacket packet) {
+		ClientPlayNetworking.send(packet.getName(), packet.toByteBuf());
 	}
 	
 	/**

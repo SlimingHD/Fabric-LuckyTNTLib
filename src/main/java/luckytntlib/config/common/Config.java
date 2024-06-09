@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -12,43 +11,24 @@ import java.util.function.Supplier;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
-public class Config {
+public abstract class Config {
 	
-	private final String modid;
-	private final List<ConfigValue<?>> configValues;
+	protected final String modid;
+	protected final List<ConfigValue<?>> configValues;
 	
-	private Config(String modid, List<ConfigValue<?>> configValues) {
+	protected Config(String modid, List<ConfigValue<?>> configValues) {
 		this.modid = modid;
 		this.configValues = configValues;
 	}
 	
-	public void init() {
-		Path path = FabricLoader.getInstance().getConfigDir();
-		File file = new File(path.toString() + "\\" + modid + "-config.json");
-		
-		if(!file.exists()) {
-			createConfigFile(file);
-		} else {
-			loadConfigValues(file);
-		}
-	}
+	public abstract void init();
 	
-	public void save() {
-		Path path = FabricLoader.getInstance().getConfigDir();
-		File file = new File(path.toString() + "\\" + modid + "-config.json");
-		
-		if(!file.exists()) {
-			createConfigFile(file);
-		} else {
-			file.delete();
-			createConfigFile(file);
-		}
-	}
+	public abstract void save(World world);
 	
-	private void createConfigFile(File file) {
+	protected void createConfigFile(File file) {
 		try {
 			file.createNewFile();
 			
@@ -80,7 +60,7 @@ public class Config {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void loadConfigValues(File file) {
+	protected void loadConfigValues(File file) {
 		try {
 			FileReader reader = new FileReader(file);
 			JsonReader json = new JsonReader(reader);
@@ -133,8 +113,12 @@ public class Config {
 			return this;
 		}
 		
-		public Config build() {
-			return new Config(id, values);
+		public ServerConfig buildServer() {
+			return new ServerConfig(id, values);
+		}
+		
+		public ClientConfig buildClient() {
+			return new ClientConfig(id, values);
 		}
 	}
 	

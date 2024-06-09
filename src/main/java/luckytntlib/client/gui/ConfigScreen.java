@@ -66,7 +66,7 @@ public class ConfigScreen extends Screen{
 			LuckyTNTLibConfigValues.EXPLOSION_PERFORMANCE_FACTOR.set(explosion_performance_factor_slider.getValue() / 100d);
 		}
 		if(LuckyTNTLibConfigValues.CONFIG != null) {
-			LuckyTNTLibConfigValues.CONFIG.save();
+			LuckyTNTLibConfigValues.CONFIG.save(client.world);
 		}
 		super.close();
 	}
