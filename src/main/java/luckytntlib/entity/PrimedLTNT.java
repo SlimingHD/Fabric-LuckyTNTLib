@@ -146,6 +146,6 @@ public class PrimedLTNT extends TntEntity implements IExplosiveEntity{
 
 	@Override
 	public void setPersistentData(NbtCompound tag) {
-		dataTracker.set(PERSISTENT_DATA, tag);
+		dataTracker.set(PERSISTENT_DATA, tag, true);
 	}
 }

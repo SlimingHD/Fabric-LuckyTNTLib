@@ -49,6 +49,6 @@ public abstract class EntityMixin implements LuckyTNTEntityExtension {
 
 	@Unique
 	public void setAdditionalPersistentData(NbtCompound nbt) {
-		dataTracker.set(PERSISTENT_DATA, nbt);
+		dataTracker.set(PERSISTENT_DATA, nbt, true);
 	}
 }

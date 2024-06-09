@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "luckytntlib",
-	"version": "0.97.1.2",
+	"version": "0.97.1.3",
 	"name": "Lucky TNT Lib",
 	"description": "This mod acts as a library for TNT mods usually associated with the word \"Lucky\". It allows for quick creation and easy maintenance of TNT mods and is a hard dependency.",
 	"authors": [
@@ -9,7 +9,7 @@
 		"Fleshcrafter"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/lucky-tnt-lib",
 		"sources": "https://github.com/SlimingHD/Fabric-LuckyTNTLib"
 	},
 	"license": "All Rights Reserved",

@@ -187,6 +187,6 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 
 	@Override
 	public void setPersistentData(NbtCompound tag) {
-		dataTracker.set(PERSISTENT_DATA, tag);
+		dataTracker.set(PERSISTENT_DATA, tag, true);
 	}
 }

@@ -280,6 +280,6 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 
 	@Override
 	public void setPersistentData(NbtCompound tag) {
-		dataTracker.set(PERSISTENT_DATA, tag);
+		dataTracker.set(PERSISTENT_DATA, tag, true);
 	}
 }
