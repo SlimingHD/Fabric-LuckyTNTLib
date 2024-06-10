@@ -9,7 +9,7 @@ import luckytntlib.client.gui.widget.CenteredStringWidget;
 import luckytntlib.config.LuckyTNTLibConfigValues;
 import luckytntlib.config.common.Config;
 import luckytntlib.config.common.Config.ConfigValue;
-import luckytntlib.network.UpdateConfigValuesC2SPacket;
+import luckytntlib.network.UpdateConfigValuesPacket;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -85,7 +85,7 @@ public class ConfigScreen extends Screen {
 			values.add(LuckyTNTLibConfigValues.PERFORMANT_EXPLOSION);
 		}
 		if(!values.isEmpty()) {
-			LuckyTNTLib.RH.sendC2SPacket(new UpdateConfigValuesC2SPacket(values));
+			LuckyTNTLib.RH.sendC2SPacket(new UpdateConfigValuesPacket(values));
 		}
 		
 		super.close();

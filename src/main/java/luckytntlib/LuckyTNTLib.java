@@ -60,10 +60,11 @@ public class LuckyTNTLib implements ModInitializer {
 	public void onInitialize() {
     	ItemRegistry.init();
     	ItemGroupModification.init();
-    	EventRegistry.init();
     	NetworkRegistry.init();
     	
     	if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+        	EventRegistry.init();
+        	
     		RH.registerConfigScreenFactory(Text.literal("Lucky TNT Lib"), ClientAccess.getFactory());
     	}
     	

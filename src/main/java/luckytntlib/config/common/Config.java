@@ -12,7 +12,15 @@ import java.util.function.Supplier;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import luckytntlib.config.LuckyTNTLibConfigValues;
 import luckytntlib.network.LuckyTNTPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.nbt.NbtByte;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtDouble;
+import net.minecraft.nbt.NbtInt;
+import net.minecraft.nbt.NbtString;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -100,6 +108,43 @@ public abstract class Config {
 	
 	public List<ConfigValue<?>> getConfigValues() {
 		return configValues;
+	}
+	
+	public static PacketByteBuf valuesToPacketByteBuf(List<ConfigValue<?>> values) {
+		NbtCompound tag = new NbtCompound();
+		
+		for(ConfigValue<?> value : values) {
+			if(value instanceof IntValue intval) {
+				tag.putInt(value.getName(), intval.get().intValue());
+			} else if(value instanceof DoubleValue dval) {
+				tag.putDouble(value.getName(), dval.get().doubleValue());
+			} else if(value instanceof BooleanValue bval) {
+				tag.putBoolean(value.getName(), bval.get().booleanValue());
+			} else if(value instanceof EnumValue eval) {
+				tag.putString(value.getName(), eval.getNameOfValue());
+			}
+		}
+		
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeNbt(tag);
+		return buf;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void writeToValues(NbtCompound tag, List<ConfigValue<?>> values) {
+		for(ConfigValue<?> value : LuckyTNTLibConfigValues.CONFIG.getConfigValues()) {
+			if(tag.contains(value.getName())) {
+				if(value instanceof IntValue intval && tag.get(value.getName()) instanceof NbtInt nbt) {
+					intval.set(nbt.intValue());
+				} else if(value instanceof DoubleValue dval && tag.get(value.getName()) instanceof NbtDouble nbt) {
+					dval.set(nbt.doubleValue());
+				} else if(value instanceof BooleanValue bval && tag.get(value.getName()) instanceof NbtByte nbt) {
+					bval.set(nbt.byteValue() == 0 ? false : true);
+				} else if(value instanceof EnumValue eval && tag.get(value.getName()) instanceof NbtString nbt) {
+					eval.set(eval.getValueByName(nbt.asString()));
+				}
+			}
+		}
 	}
 
 	public static class Builder {

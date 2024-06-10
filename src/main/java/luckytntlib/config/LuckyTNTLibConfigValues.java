@@ -6,9 +6,9 @@ import luckytntlib.LuckyTNTLib;
 import luckytntlib.config.common.Config;
 import luckytntlib.config.common.Config.ConfigValue;
 import luckytntlib.config.common.Config.UpdatePacketCreator;
-import luckytntlib.network.LuckyTNTPacket;
-import luckytntlib.network.UpdateConfigValuesS2CPacket;
 import luckytntlib.config.common.ServerConfig;
+import luckytntlib.network.LuckyTNTPacket;
+import luckytntlib.network.UpdateConfigValuesPacket;
 
 public class LuckyTNTLibConfigValues {
 	
@@ -21,7 +21,7 @@ public class LuckyTNTLibConfigValues {
 		
 		@Override
 		public LuckyTNTPacket getPacket(List<ConfigValue<?>> configValues) {
-			return new UpdateConfigValuesS2CPacket(configValues);
+			return new UpdateConfigValuesPacket(configValues);
 		}
 	};
 	

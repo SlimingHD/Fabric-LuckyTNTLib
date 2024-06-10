@@ -1,31 +1,24 @@
 package luckytntlib.registry;
 
 import luckytntlib.LuckyTNTLib;
-import luckytntlib.config.LuckyTNTLibConfigValues;
-import luckytntlib.network.UpdateConfigValuesS2CPacket;
+import luckytntlib.network.ClientReadyC2SPacket;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents.Join;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.Join;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 
 public class EventRegistry {
 	
-	private static final Join PLAYER_JOIN = new Join() {
+	private static final Join PLAYER_JOIN_CLIENT = new Join() {
 		
 		@Override
-		public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
-			for(ServerWorld world : server.getWorlds()) {
-				for(ServerPlayerEntity entity : world.getPlayers()) {
-					LuckyTNTLib.RH.sendS2CPacket(entity, new UpdateConfigValuesS2CPacket(LuckyTNTLibConfigValues.CONFIG.getConfigValues()));
-				}
-			}
+		public void onPlayReady(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+			LuckyTNTLib.RH.sendC2SPacket(new ClientReadyC2SPacket());
 		}
 	};
 	
 	public static void init() {
-		ServerPlayConnectionEvents.JOIN.register(PLAYER_JOIN);
+		ClientPlayConnectionEvents.JOIN.register(PLAYER_JOIN_CLIENT);
 	}
 }
