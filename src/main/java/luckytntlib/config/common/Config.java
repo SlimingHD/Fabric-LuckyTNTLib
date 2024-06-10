@@ -6,11 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import luckytntlib.network.LuckyTNTPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -18,10 +20,12 @@ public abstract class Config {
 	
 	protected final String modid;
 	protected final List<ConfigValue<?>> configValues;
+	protected final Optional<UpdatePacketCreator> packetCreator;
 	
-	protected Config(String modid, List<ConfigValue<?>> configValues) {
+	protected Config(String modid, List<ConfigValue<?>> configValues, Optional<UpdatePacketCreator> packetCreator) {
 		this.modid = modid;
 		this.configValues = configValues;
+		this.packetCreator = packetCreator;
 	}
 	
 	public abstract void init();
@@ -93,11 +97,16 @@ public abstract class Config {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<ConfigValue<?>> getConfigValues() {
+		return configValues;
+	}
 
 	public static class Builder {
 		
 		private String id = "";
 		private List<ConfigValue<?>> values = new ArrayList<>();
+		private Optional<UpdatePacketCreator> packetCreator = Optional.empty();
 		
 		private Builder() {
 		}
@@ -113,12 +122,17 @@ public abstract class Config {
 			return this;
 		}
 		
+		public Builder setPacketCreator(UpdatePacketCreator creator) {
+			packetCreator = Optional.of(creator);
+			return this;
+		}
+		
 		public ServerConfig buildServer() {
-			return new ServerConfig(id, values);
+			return new ServerConfig(id, values, packetCreator);
 		}
 		
 		public ClientConfig buildClient() {
-			return new ClientConfig(id, values);
+			return new ClientConfig(id, values, packetCreator);
 		}
 	}
 	
@@ -221,5 +235,9 @@ public abstract class Config {
 			}
 			return defaultValue;
 		}
+	}
+	
+	public interface UpdatePacketCreator {
+		public LuckyTNTPacket getPacket(List<ConfigValue<?>> configValues);
 	}
 }

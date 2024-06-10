@@ -3,6 +3,7 @@ package luckytntlib.config.common;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import luckytntlib.LuckyTNTLib;
 import net.fabricmc.api.EnvType;
@@ -11,8 +12,8 @@ import net.minecraft.world.World;
 
 public class ClientConfig extends Config {
 
-	ClientConfig(String modid, List<ConfigValue<?>> configValues) {
-		super(modid, configValues);
+	ClientConfig(String modid, List<ConfigValue<?>> configValues, Optional<UpdatePacketCreator> packetCreator) {
+		super(modid, configValues, packetCreator);
 	}
 
 	public void init() {

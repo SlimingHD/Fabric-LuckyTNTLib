@@ -128,24 +128,6 @@ public class RegistryHelper {
 	}
 	
 	/**
-	 * Registeres a new packet that is meant to be sent from the server to the client
-	 * @param packetName  the {@link Identifier} that represents the name of the packet
-	 * @param packetHandler  the {@link net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler} that will handle the packet once it's recieved
-	 */
-	public void registerS2CPacket(Identifier packetName, net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler packetHandler) {
-		ClientPlayNetworking.registerGlobalReceiver(packetName, packetHandler);
-	}
-	
-	/**
-	 * Registeres a new packet that is meant to be sent from the client to the server
-	 * @param packetName  the {@link Identifier} that represents the name of the packet
-	 * @param packetHandler  the {@link net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler} that will handle the packet once it's recieved
-	 */
-	public void registerC2SPacket(Identifier packetName, net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler packetHandler) {
-		ServerPlayNetworking.registerGlobalReceiver(packetName, packetHandler);
-	}
-	
-	/**
 	 * Sends a packet from the server to the client
 	 * @param player  the player to whose client the packet is sent
 	 * @param packet  the {@link LuckyTNTPacket} that is being sent

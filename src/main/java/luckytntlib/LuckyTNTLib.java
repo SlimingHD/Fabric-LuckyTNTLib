@@ -13,8 +13,10 @@ import luckytntlib.config.LuckyTNTLibConfigValues;
 import luckytntlib.entity.LTNTMinecart;
 import luckytntlib.item.LDynamiteItem;
 import luckytntlib.item.LTNTMinecartItem;
+import luckytntlib.registry.EventRegistry;
 import luckytntlib.registry.ItemGroupModification;
 import luckytntlib.registry.ItemRegistry;
+import luckytntlib.registry.NetworkRegistry;
 import luckytntlib.registry.RegistryHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
@@ -58,6 +60,8 @@ public class LuckyTNTLib implements ModInitializer {
 	public void onInitialize() {
     	ItemRegistry.init();
     	ItemGroupModification.init();
+    	EventRegistry.init();
+    	NetworkRegistry.init();
     	
     	if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
     		RH.registerConfigScreenFactory(Text.literal("Lucky TNT Lib"), ClientAccess.getFactory());
