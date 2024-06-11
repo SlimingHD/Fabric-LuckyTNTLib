@@ -13,7 +13,7 @@ import net.minecraft.network.PacketByteBuf;
 
 public class ClientNetworkRegistry {
 
-private static final PlayChannelHandler UPDATE_S2C = new PlayChannelHandler() {
+	private static final PlayChannelHandler UPDATE_S2C = new PlayChannelHandler() {
 		
 		@Override
 		public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

@@ -93,7 +93,7 @@ public class ConfigScreen extends Screen {
 	
 	public void resetDoubleValue(Config.DoubleValue config, AdvancedSlider slider) {
 		config.set(config.getDefault());
-		slider.setValue(config.getDefault() * 100);
+		slider.setSliderValue(config.getDefault() * 100);
 	}
 	
 	public void resetBooleanValue(Config.BooleanValue config, ButtonWidget button) {
