@@ -5,11 +5,16 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import org.jetbrains.annotations.Nullable;
+
 import luckytntlib.LuckyTNTLib;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.World;
 
+/**
+ * An extension of {@link Config} that should only be used on {@link EnvType#CLIENT} and will neither init nor save on {@link EnvType#SERVER}
+ */
 public class ClientConfig extends Config {
 
 	ClientConfig(String modid, List<ConfigValue<?>> configValues, Optional<UpdatePacketCreator> packetCreator) {
@@ -33,7 +38,7 @@ public class ClientConfig extends Config {
 		}
 	}
 	
-	public void save(World world) {
+	public void save(@Nullable World world) {
 		if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
 			return;
 		}

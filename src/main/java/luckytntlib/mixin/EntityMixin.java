@@ -18,6 +18,10 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
+/**
+ * This mixin basically exists to replace the missing {@code NbtCompound Entity.persistentData} that was provided by default by Forge 
+ * and was commonly used by the LuckyTNTMod to store addditional data
+ */
 @Mixin(Entity.class)
 public abstract class EntityMixin implements LuckyTNTEntityExtension {
 
