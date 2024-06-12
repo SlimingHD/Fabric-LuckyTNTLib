@@ -22,6 +22,7 @@ import luckytntlib.item.LDynamiteItem;
 import luckytntlib.item.LTNTMinecartItem;
 import luckytntlib.item.LuckyDynamiteItem;
 import luckytntlib.network.LuckyTNTPacket;
+import luckytntlib.util.dispenser.DispenserBehaviorHelper;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -82,19 +83,6 @@ public class RegistryHelper {
 	 * The key is in this case the variable 'tab' in the individual register method
 	 */
 	public final HashMap<String, List<Supplier<? extends Item>>> creativeTabItemLists = new HashMap<>();
-	
-	/**
-	 * List of pairs of {@link LTNTBlock} that get a {@link DispenseItemBehavior} automatically registered 
-	 */
-	public static final List<Pair<Supplier<LTNTBlock>, Supplier<Item>>> TNT_DISPENSER_REGISTRY_LIST = new ArrayList<>();
-	/**
-	 * List of {@link LDynamiteItem} that get a {@link DispenseItemBehavior} automatically registered
-	 */
-	public static final List<Supplier<LDynamiteItem>> DYNAMITE_DISPENSER_REGISTRY_LIST = new ArrayList<>();
-	/**
-	 * List of {@link LTNTMinecartItem} that get a {@link DispenseItemBehavior} automatically registered
-	 */
-	public static final List<Supplier<LTNTMinecartItem>> MINECART_DISPENSER_REGISTRY_LIST = new ArrayList<>();
 	
 	/**
 	 * Creates a new instance of the RegistryHelper
@@ -223,7 +211,7 @@ public class RegistryHelper {
 				TNTLists.get(blockData.getTab()).add(block);
 			}
 			if(blockData.addDispenseBehavior()) {
-				TNT_DISPENSER_REGISTRY_LIST.add(new Pair<Supplier<LTNTBlock>, Supplier<Item>>(block, item));
+				DispenserBehaviorHelper.registerTNTBlockDispenserBehavior(block);
 			}
 			if(!blockData.getTab().equals("none")) {
 				if(creativeTabItemLists.get(blockData.getTab()) == null) {
@@ -314,7 +302,7 @@ public class RegistryHelper {
 				TNTLists.get(blockData.getTab()).add(block);
 			}
 			if(blockData.addDispenseBehavior()) {
-				TNT_DISPENSER_REGISTRY_LIST.add(new Pair<Supplier<LTNTBlock>, Supplier<Item>>(block, item));
+				DispenserBehaviorHelper.registerTNTBlockDispenserBehavior(block);
 			}
 			if(!blockData.getTab().equals("none")) {
 				if(creativeTabItemLists.get(blockData.getTab()) == null) {
@@ -381,7 +369,7 @@ public class RegistryHelper {
 			dynamiteLists.get(tab).add(item);
 		}
 		if(addDispenseBehavior) {
-			DYNAMITE_DISPENSER_REGISTRY_LIST.add(item);
+			DispenserBehaviorHelper.registerDynamiteDispenserBehavior(item);
 		}
 		if(!tab.equals("none")) {
 			if(creativeTabItemLists.get(tab) == null) {
@@ -436,7 +424,7 @@ public class RegistryHelper {
 			minecartLists.get(tab).add(item);
 		}
 		if(addDispenseBehavior) {
-			MINECART_DISPENSER_REGISTRY_LIST.add(item);
+			DispenserBehaviorHelper.registerMinecartDispenserBehavior(item);
 		}
 		if(!tab.equals("none")) {
 			if(creativeTabItemLists.get(tab) == null) {
