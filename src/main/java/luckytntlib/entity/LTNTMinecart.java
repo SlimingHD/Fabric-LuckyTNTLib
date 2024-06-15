@@ -192,7 +192,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	
 	@Override
 	public BlockState getContainedBlock() {
-		return getEffect().getBlock().getDefaultState();
+		return getEffect().getBlockState(this);
 	}
 	
 	@Override
