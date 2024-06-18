@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import luckytntlib.config.LuckyTNTLibConfigValues;
 import luckytntlib.network.LuckyTNTPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.NbtByte;
@@ -187,7 +186,7 @@ public abstract class Config {
 	 * @param values  the {@link List} of {@link ConfigValue}s the data from <code>tag</code> will be written to
 	 */
 	public static void writeToValues(NbtCompound tag, List<ConfigValue<?>> values) {
-		for(ConfigValue<?> value : LuckyTNTLibConfigValues.CONFIG.getConfigValues()) {
+		for(ConfigValue<?> value : values) {
 			if(tag.contains(value.getName())) {
 				if(value instanceof IntValue intval && tag.get(value.getName()) instanceof NbtInt nbt) {
 					intval.set(nbt.intValue());
