@@ -18,7 +18,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * 
  * A LivingPrimedLTNT is a type of TNT designed to have health points,
  * attack damage and be able to use an AI to wander around and interact with the world,
  * while still retaining the abilities of a TNT through its {@link PrimedTNTEffect}.
@@ -32,6 +31,7 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 	private LivingEntity igniter;
 	private PrimedTNTEffect effect;
 	private static final TrackedData<Integer> DATA_FUSE_ID = DataTracker.registerData(LivingPrimedLTNT.class, TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<NbtCompound> PERSISTENT_DATA = DataTracker.registerData(LivingPrimedLTNT.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 	
 	public LivingPrimedLTNT(EntityType<? extends PathAwareEntity> type, World level, @Nullable PrimedTNTEffect effect) {
 		super(type, level);
@@ -48,6 +48,7 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 	@Override
 	public void initDataTracker() {
 		dataTracker.startTracking(DATA_FUSE_ID, -1);
+		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
 		super.initDataTracker();
 	}
 	
@@ -57,6 +58,7 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 			tag.putInt("throwerID", igniter.getId());
 		}
 		tag.putShort("Fuse", (short)getTNTFuse());
+		tag.put("PersistentData", getPersistentData());
 		super.writeCustomDataToNbt(tag);
 	}
 	
@@ -66,6 +68,7 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 			igniter = lEnt;
 		}
 		setTNTFuse(tag.getShort("Fuse"));
+		setPersistentData(tag.getCompound("PersistentData"));
 		super.readCustomDataFromNbt(tag);
 	}
 	
@@ -142,5 +145,15 @@ public class LivingPrimedLTNT extends PathAwareEntity implements IExplosiveEntit
 	@Override
 	public LivingEntity owner() {
 		return igniter;
+	}
+
+	@Override
+	public NbtCompound getPersistentData() {
+		return dataTracker.get(PERSISTENT_DATA);
+	}
+	
+	@Override
+	public void setPersistentData(NbtCompound tag) {
+		dataTracker.set(PERSISTENT_DATA, tag, true);
 	}
 }

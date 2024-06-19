@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class TNTConfigItem extends Item {
 
 	public TNTConfigItem() {
-		super(new Item.Settings());
+		super(new Item.Settings().maxCount(1));
 	}
 
 	@Override

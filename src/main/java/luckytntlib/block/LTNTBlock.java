@@ -40,7 +40,6 @@ import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 
 /**
- * 
  * The {@link LTNTBlock} is an extension of the {@link TntBlock} and it spawns a {@link PrimedLTNT} instead of a {@link TntEntity}.
  * If a {@link DispenserBehavior} has been registered dispensers can also spawn the TNT.
  */

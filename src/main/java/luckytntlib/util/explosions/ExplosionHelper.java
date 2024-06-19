@@ -8,14 +8,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * 
  * The ExplosionHelper offers many basic functions that help you get or edit large ares of blocks in the current {@link World}.
  * This includes simple spherical functions, but also more complex methods like getting the top most block in a sphere.
- * On top of that it also allows for easy customization.
  */
 public class ExplosionHelper {
 
@@ -33,7 +32,7 @@ public class ExplosionHelper {
 				for(int offZ = -radius; offZ <= radius; offZ++) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						blocks.put(pos, state);
 					}
@@ -55,7 +54,7 @@ public class ExplosionHelper {
 		for(int offX = (int)-radii.x; offX <= (int)radii.x; offX++) {
 			for(int offY = (int)radii.y; offY >= (int)-radii.y; offY--) {
 				for(int offZ = (int)-radii.z; offZ <= (int)radii.z; offZ++) {
-					BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+					BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 					BlockState state = level.getBlockState(pos);
 					blocks.put(pos, state);
 				}
@@ -78,7 +77,7 @@ public class ExplosionHelper {
 				for(int offZ = -radius; offZ <= radius; offZ++) {
 					double distance = Math.sqrt(offX * offX + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						blocks.put(pos, state);
 					}
@@ -101,7 +100,7 @@ public class ExplosionHelper {
 				for(int offZ = -radius; offZ <= radius; offZ++) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						blockEffect.doBlockExplosion(level, pos, state, distance);
 					}
@@ -125,7 +124,7 @@ public class ExplosionHelper {
 				for(double offZ = -radius * scaling.z; offZ <= radius * scaling.z; offZ++) {
 					double distance = Math.sqrt(offX * offX / scaling.x + offY * offY / scaling.y + offZ * offZ / scaling.z);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add((int)offX, (int)offY, (int)offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add((int)offX, (int)offY, (int)offZ);
 						BlockState state = level.getBlockState(pos);
 						blockEffect.doBlockExplosion(level, pos, state, distance);
 					}
@@ -146,7 +145,7 @@ public class ExplosionHelper {
 			for(int offY = -radius; offY <= radius; offY++) {
 				for(int offZ = -radius; offZ <= radius; offZ++) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
-					BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+					BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 					BlockState state = level.getBlockState(pos);
 					blockEffect.doBlockExplosion(level, pos, state, distance);
 				}
@@ -166,7 +165,7 @@ public class ExplosionHelper {
 			for(int offY = (int)-radii.y; offY <= (int)radii.y; offY++) {
 				for(int offZ = (int)-radii.z; offZ <= (int)radii.z; offZ++) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
-					BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+					BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 					BlockState state = level.getBlockState(pos);
 					blockEffect.doBlockExplosion(level, pos, state, distance);
 				}
@@ -188,7 +187,7 @@ public class ExplosionHelper {
 				for(int offZ = -radius; offZ <= radius; offZ++) {
 					double distance = Math.sqrt(offX * offX + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						blockEffect.doBlockExplosion(level, pos, state, distance);
 					}
@@ -211,7 +210,7 @@ public class ExplosionHelper {
 				topToBottom: for(int offY = radius; offY >= -radius; offY--) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						if((level.getBlockState(pos.down()).isFullCube(level, pos.down()) || level.getBlockState(pos.down()).isSideSolidFullSquare(level, pos.down(), Direction.UP)) && (state.isAir() || state.canReplace(new AutomaticItemPlacementContext(level, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP))  || (!state.isFullCube(level, pos) && state.getBlock().getBlastResistance() == 0) || state.isIn(BlockTags.FLOWERS))) {
 							blockEffect.doBlockExplosion(level, pos, state, distance);
@@ -239,7 +238,7 @@ public class ExplosionHelper {
 				topToBottom: for(int offY = radius; offY >= -radius; offY--) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						if(!level.getBlockState(pos.down()).isAir()) {
 							if(condition.conditionMet(level, pos.down(), level.getBlockState(pos.down()), Math.sqrt(offX * offX + (offY-1) * (offY-1) + offZ * offZ))) {
@@ -267,7 +266,7 @@ public class ExplosionHelper {
 				for(int offY = radius; offY >= -radius; offY--) {
 					double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
 					if(distance <= radius) {
-						BlockPos pos = new BlockPos((int)position.x, (int)position.y, (int)position.z).add(offX, offY, offZ);
+						BlockPos pos = new BlockPos(MathHelper.floor(position.x), MathHelper.floor(position.y), MathHelper.floor(position.z)).add(offX, offY, offZ);
 						BlockState state = level.getBlockState(pos);
 						if((level.getBlockState(pos.down()).isFullCube(level, pos.down()) || level.getBlockState(pos.down()).isSideSolidFullSquare(level, pos.down(), Direction.UP)) && (state.isAir() || state.canReplace(new AutomaticItemPlacementContext(level, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)) || (!state.isFullCube(level, pos) && state.getBlock().getBlastResistance() == 0) || state.isIn(BlockTags.FLOWERS))) {
 							blockEffect.doBlockExplosion(level, pos, state, distance);

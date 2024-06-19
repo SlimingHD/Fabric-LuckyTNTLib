@@ -21,7 +21,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * 
  * The LExplosiveProjectile is an extension of Minecraft's {@link PersistentProjectileEntity} 
  * and represents a projectile that holds a {@link PrimedTNTEffect}.
  * Unlike a {@link PrimedLTNT} a LExplosiveProjectile has access to other types of logic specifically designed
@@ -32,6 +31,7 @@ import net.minecraft.world.World;
 public class LExplosiveProjectile extends PersistentProjectileEntity implements IExplosiveEntity, FlyingItemEntity{
 	
 	private static final TrackedData<Integer> DATA_FUSE_ID = DataTracker.registerData(LExplosiveProjectile.class, TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<NbtCompound> PERSISTENT_DATA = DataTracker.registerData(LExplosiveProjectile.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 	@Nullable
 	private LivingEntity thrower;
 	private boolean hitEntity = false;
@@ -74,6 +74,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	@Override
 	public void initDataTracker() {
 		dataTracker.startTracking(DATA_FUSE_ID, -1);
+		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
 		super.initDataTracker();
 	}
 	
@@ -83,6 +84,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 			tag.putInt("throwerID", thrower.getId());
 		}
 		tag.putShort("Fuse", (short)getTNTFuse());
+		tag.put("PersistentData", getPersistentData());
 		super.writeCustomDataToNbt(tag);
 	}
 	
@@ -92,6 +94,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 			thrower = lEnt;
 		}
 		setTNTFuse(tag.getShort("Fuse"));
+		setPersistentData(tag.getCompound("PersistentData"));
 		super.readCustomDataFromNbt(tag);
 	}
 	
@@ -175,5 +178,15 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	@Override
 	public LivingEntity owner() {
 		return getOwner();
+	}
+	
+	@Override
+	public NbtCompound getPersistentData() {
+		return dataTracker.get(PERSISTENT_DATA);
+	}
+
+	@Override
+	public void setPersistentData(NbtCompound tag) {
+		dataTracker.set(PERSISTENT_DATA, tag, true);
 	}
 }

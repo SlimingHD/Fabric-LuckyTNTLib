@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.world.World;
 
 /**
- * 
  * The LuckyTNTMinecart is an extension of the {@link LTNTMinecart}
  * and turns into a random {@link LTNTMinecart} of a list when fused.
  */

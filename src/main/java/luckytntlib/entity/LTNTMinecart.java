@@ -32,7 +32,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 /**
- * 
  * The LTNTMinecart is an extension of Minecraft's {@link AbstractMinecartEntity}
  * and can hold an already existing {@link PrimedLTNT} and its {@link PrimedTNTEffect}.
  * It implements {@link IExplosiveEntity}.
@@ -40,6 +39,7 @@ import net.minecraft.world.event.GameEvent;
 public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 
 	private static final TrackedData<Integer> DATA_FUSE_ID = DataTracker.registerData(LTNTMinecart.class, TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<NbtCompound> PERSISTENT_DATA = DataTracker.registerData(LTNTMinecart.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 	private boolean explodeInstantly;
 	protected PrimedTNTEffect effect;
 	protected Supplier<Supplier<LTNTMinecartItem>> pickItem;
@@ -167,6 +167,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	@Override
 	public void initDataTracker() {
 		dataTracker.startTracking(DATA_FUSE_ID, -1);
+		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
 		super.initDataTracker();
 	}
 	
@@ -191,7 +192,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	
 	@Override
 	public BlockState getContainedBlock() {
-		return getEffect().getBlock().getDefaultState();
+		return getEffect().getBlockState(this);
 	}
 	
 	@Override
@@ -200,6 +201,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 			tag.putInt("placerID", placer.getId());
 		}
 		tag.putShort("Fuse", (short)getTNTFuse());
+		tag.put("PersistentData", getPersistentData());
 		super.writeCustomDataToNbt(tag);
 	}
 	
@@ -209,6 +211,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 			placer = lEnt;
 		}
 		setTNTFuse(tag.getShort("Fuse"));
+		setPersistentData(tag.getCompound("PersistentData"));
 		super.readCustomDataFromNbt(tag);
 	}
 	
@@ -268,5 +271,15 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	@Override
 	public LivingEntity owner() {
 		return getOwner();
+	}
+
+	@Override
+	public NbtCompound getPersistentData() {
+		return dataTracker.get(PERSISTENT_DATA);
+	}
+
+	@Override
+	public void setPersistentData(NbtCompound tag) {
+		dataTracker.set(PERSISTENT_DATA, tag, true);
 	}
 }

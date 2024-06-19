@@ -16,7 +16,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 /**
- * 
  * The LTNTMinecartRenderer renders a Minecart with a TNT inside of it.
  * The TNT is scaled using the size parameter of its {@link PrimedTNTEffect}.
  */

@@ -1,18 +1,18 @@
 {
 	"schemaVersion": 1,
 	"id": "luckytntlib",
-	"version": "0.97.1.0",
+	"version": "0.97.1.7",
 	"name": "Lucky TNT Lib",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This mod acts as a library for TNT mods usually associated with the word \"Lucky\". It allows for quick creation and easy maintenance of TNT mods and is a hard dependency.",
 	"authors": [
 		"SlimingHD",
 		"Fleshcrafter"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/lucky-tnt-lib",
+		"sources": "https://github.com/SlimingHD/Fabric-LuckyTNTLib"
 	},
-	"license": "CC0-1.0",
+	"license": "All Rights Reserved",
 	"icon": "assets/luckytntlib/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -25,11 +25,10 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.20.4",
+		"minecraft": ">=1.20.3",
 		"java": ">=17",
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }

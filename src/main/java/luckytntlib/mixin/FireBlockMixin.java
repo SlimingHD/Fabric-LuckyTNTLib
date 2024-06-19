@@ -6,20 +6,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import luckytntlib.block.LTNTBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.block.TntBlock;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.explosion.Explosion.DestructionType;
 
+/**
+ * This Mixin ensures that TNT is turning into the correct TNT when it's lit by fire
+ */
 @Mixin(FireBlock.class)
 public abstract class FireBlockMixin {
 	
@@ -48,8 +48,11 @@ public abstract class FireBlockMixin {
             }
             
             if (block instanceof TntBlock tnt) {
-            	Explosion explosion = new Explosion(world, null, null, null, 0, 0, 0, 0, false, DestructionType.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE);
-    			tnt.onDestroyedByExplosion(world, pos, explosion);
+            	if(tnt instanceof LTNTBlock ltnt) {
+    				ltnt.explode(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
+    			} else {
+                	TntBlock.primeTnt(world, pos);
+    			}
     			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
             }
         }
