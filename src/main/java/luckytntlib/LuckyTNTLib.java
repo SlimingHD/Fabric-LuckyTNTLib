@@ -82,8 +82,8 @@ public class LuckyTNTLib implements ModInitializer {
 				} else {
 					setSuccess(false);
 				}
-				if (isSuccess() && stack.damage(1, world.random, null)) {
-					stack.setCount(0);
+				if (this.isSuccess()) {
+					stack.damage(1, world.getRandom(), null, () -> stack.setCount(0));
 				}
 				return stack;
 			}

@@ -14,6 +14,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -38,10 +39,11 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	private PrimedTNTEffect effect;
 	
 	public LExplosiveProjectile(EntityType<LExplosiveProjectile> type, World level, PrimedTNTEffect effect) {
-		super(type, level, ItemStack.EMPTY);
+		super(type, level, new ItemStack(Items.CARROT));
 		setTNTFuse(effect.getDefaultFuse(this));
 		pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 		this.effect = effect;
+		setStack(getDefaultItemStack());
 	}
 	
 	@Override
@@ -72,10 +74,10 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	}
 	
 	@Override
-	public void initDataTracker() {
-		dataTracker.startTracking(DATA_FUSE_ID, -1);
-		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
-		super.initDataTracker();
+	public void initDataTracker(DataTracker.Builder builder) {
+		builder.add(DATA_FUSE_ID, -1);
+		builder.add(PERSISTENT_DATA, new NbtCompound());
+		super.initDataTracker(builder);
 	}
 	
 	@Override
@@ -132,7 +134,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	
 	@Override
 	public ItemStack asItemStack() {
-		return null;
+		return getStack();
 	}
 	
 	@Override
@@ -172,7 +174,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	
 	@Override
 	public ItemStack getStack() {
-		return effect.getItemStack();
+		return effect == null ? new ItemStack(Items.CARROT) : effect.getItemStack();
 	}
 	
 	@Override
@@ -188,5 +190,10 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	@Override
 	public void setPersistentData(NbtCompound tag) {
 		dataTracker.set(PERSISTENT_DATA, tag, true);
+	}
+
+	@Override
+	protected ItemStack getDefaultItemStack() {
+		return new ItemStack(Items.CARROT);
 	}
 }

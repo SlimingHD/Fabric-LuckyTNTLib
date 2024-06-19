@@ -14,15 +14,12 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import luckytntlib.network.LuckyTNTPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.NbtByte;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtDouble;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -151,13 +148,13 @@ public abstract class Config {
 	}
 	
 	/**
-	 * Writes the data from a {@link List} of {@link ConfigValue}s to a {@link PacketByteBuf}. <br>
-	 * Mainly used by {@link Packet}s to serialize the data
+	 * Writes the data from a {@link List} of {@link ConfigValue}s to a {@link NbtCompound}. <br>
+	 * Mainly used by {@link CustomPayload}s to serialize the data
 	 * 
-	 * @param values  the values that will be written to a new {@link PacketByteBuf}
-	 * @return a {@link PacketByteBuf} that contains all values that were given to this method via <code>values</code>
+	 * @param values  the values that will be written to a new {@link NbtCompound}
+	 * @return a {@link NbtCompound} that contains all values that were given to this method via <code>values</code>
 	 */
-	public static PacketByteBuf valuesToPacketByteBuf(List<ConfigValue<?>> values) {
+	public static NbtCompound valuesToNbtCompound(List<ConfigValue<?>> values) {
 		NbtCompound tag = new NbtCompound();
 		
 		for(ConfigValue<?> value : values) {
@@ -172,9 +169,7 @@ public abstract class Config {
 			}
 		}
 		
-		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeNbt(tag);
-		return buf;
+		return tag;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -449,6 +444,6 @@ public abstract class Config {
 	
 	@FunctionalInterface
 	public interface UpdatePacketCreator {
-		public LuckyTNTPacket getPacket(List<ConfigValue<?>> configValues);
+		public CustomPayload getPacket(List<ConfigValue<?>> configValues);
 	}
 }

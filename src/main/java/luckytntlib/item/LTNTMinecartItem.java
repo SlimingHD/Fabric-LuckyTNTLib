@@ -9,6 +9,7 @@ import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.enums.RailShape;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -55,7 +56,7 @@ public class LTNTMinecartItem extends MinecartItem{
 		}
 		LTNTMinecart minecart = createMinecart(level, pos.getX() + 0.5f, pos.getY() + 0.0625f + railHeight, pos.getZ() + 0.5f, context.getPlayer());
 		minecart.setOwner(context.getPlayer());
-        if (stack.hasCustomName()) {
+        if (stack.contains(DataComponentTypes.CUSTOM_NAME) && stack.get(DataComponentTypes.CUSTOM_NAME) != null && !stack.get(DataComponentTypes.CUSTOM_NAME).getString().equals("")) {
             minecart.setCustomName(stack.getName());
         }
         level.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, pos);

@@ -9,6 +9,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+
 import luckytntlib.util.LuckyTNTEntityExtension;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -31,9 +34,11 @@ public abstract class EntityMixin implements LuckyTNTEntityExtension {
 	
 	private static final TrackedData<NbtCompound> PERSISTENT_DATA = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 	
-	@Inject(method = "<init>", at = @At("TAIL"))
-	private void injectionConstructor(EntityType<?> type, World world, CallbackInfo info) {
-		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
+	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;initDataTracker(Lnet/minecraft/entity/data/DataTracker$Builder;)V"))
+	private void injectionConstructor(EntityType<?> type, World world, CallbackInfo info, @Local(ordinal = 0) LocalRef<DataTracker.Builder> builder) {
+		DataTracker.Builder build = builder.get();
+		build.add(PERSISTENT_DATA, new NbtCompound());
+		builder.set(build);
 	}
 	
 	@Inject(method = "readNbt", at = @At("HEAD"))

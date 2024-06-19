@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "luckytntlib",
-	"version": "0.97.1.7",
+	"version": "0.100.2.0",
 	"name": "Lucky TNT Lib",
 	"description": "This mod acts as a library for TNT mods usually associated with the word \"Lucky\". It allows for quick creation and easy maintenance of TNT mods and is a hard dependency.",
 	"authors": [
@@ -25,8 +25,8 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
-		"minecraft": ">=1.20.3",
-		"java": ">=17",
+		"minecraft": ">=1.20.5",
+		"java": ">=21",
 		"fabric-api": "*"
 	},
 	"suggests": {

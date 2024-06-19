@@ -21,7 +21,6 @@ import luckytntlib.entity.PrimedLTNT;
 import luckytntlib.item.LDynamiteItem;
 import luckytntlib.item.LTNTMinecartItem;
 import luckytntlib.item.LuckyDynamiteItem;
-import luckytntlib.network.LuckyTNTPacket;
 import luckytntlib.util.dispenser.DispenserBehaviorHelper;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -30,12 +29,13 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.block.MapColor;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -120,16 +120,16 @@ public class RegistryHelper {
 	 * @param player  the player to whose client the packet is sent
 	 * @param packet  the {@link LuckyTNTPacket} that is being sent
 	 */
-	public void sendS2CPacket(ServerPlayerEntity player, LuckyTNTPacket packet) {
-		ServerPlayNetworking.send(player, packet.getName(), packet.toByteBuf());
+	public void sendS2CPacket(ServerPlayerEntity player, CustomPayload packet) {
+		ServerPlayNetworking.send(player, packet);
 	}
 	
 	/**
 	 * Sends a packet from the client to the server
 	 * @param packet  the {@link LuckyTNTPacket} that is being sent
 	 */
-	public void sendC2SPacket(LuckyTNTPacket packet) {
-		ClientPlayNetworking.send(packet.getName(), packet.toByteBuf());
+	public void sendC2SPacket(CustomPayload packet) {
+		ClientPlayNetworking.send(packet);
 	}
 	
 	/**
@@ -195,7 +195,7 @@ public class RegistryHelper {
 			Item ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
 				
 				@Override
-				public void appendTooltip(ItemStack stack, @Nullable World level, List<Text> components, TooltipContext flag) {
+				public void appendTooltip(ItemStack stack, Item.TooltipContext level, List<Text> components, TooltipType flag) {
 					super.appendTooltip(stack, level, components, flag);
 					if(!blockData.getDescription().getString().equals("")) {
 						components.add(blockData.getDescription());
@@ -286,7 +286,7 @@ public class RegistryHelper {
 			Item ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
 				
 				@Override
-				public void appendTooltip(ItemStack stack, @Nullable World level, List<Text> components, TooltipContext flag) {
+				public void appendTooltip(ItemStack stack, Item.TooltipContext level, List<Text> components, TooltipType flag) {
 					super.appendTooltip(stack, level, components, flag);
 					if(!blockData.getDescription().getString().equals("")) {
 						components.add(blockData.getDescription());
@@ -468,11 +468,11 @@ public class RegistryHelper {
 	 */
 	public Supplier<EntityType<PrimedLTNT>> registerTNTEntity(String entityRegistry, String registryName, PrimedTNTEffect effect, float size, boolean fireImmune){
 		if(fireImmune) {
-			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().setDimensions(size, size).build(registryName));
+			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 		else {
-			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).setDimensions(size, size).build(registryName));
+			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 	}
@@ -522,7 +522,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of an {@link EntityType} of a {@link LTNTMinecart}
 	 */
 	public Supplier<EntityType<LTNTMinecart>> registerTNTMinecart(String entityRegistry, String registryName, Supplier<EntityType<PrimedLTNT>> TNT, Supplier<Supplier<LTNTMinecartItem>> pickItem, boolean explodesInstantly){		
-		EntityType<LTNTMinecart> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LTNTMinecart>create((EntityType<LTNTMinecart> type, World level) -> new LTNTMinecart(type, level, TNT, pickItem, explodesInstantly), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).setDimensions(0.98f, 0.7f).build(registryName));
+		EntityType<LTNTMinecart> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LTNTMinecart>create((EntityType<LTNTMinecart> type, World level) -> new LTNTMinecart(type, level, TNT, pickItem, explodesInstantly), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(0.98f, 0.7f).build(registryName));
 		return () -> rtype;
 	}
 	
@@ -595,11 +595,11 @@ public class RegistryHelper {
 	 */
 	public Supplier<EntityType<LExplosiveProjectile>> registerExplosiveProjectile(String entityRegistry, String registryName, PrimedTNTEffect effect, float size, boolean fireImmune){
 		if(fireImmune) {
-			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().setDimensions(size, size).build(registryName));
+			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 		else {
-			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).setDimensions(size, size).build(registryName));
+			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 	}
