@@ -95,15 +95,6 @@ public class LTNTBlock extends TntBlock {
 		return 0f;
 	}
 	
-	/*public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-		return true;
-	}
-	
-	@Override
-	public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-		return 200;
-	}*/
-	
 	@Override
 	public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {
 		return Collections.singletonList(new ItemStack(this));
