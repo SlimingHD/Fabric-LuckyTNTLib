@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class UpdateConfigValuesPacket implements CustomPayload {
 	
-	public static final Identifier NAME = new Identifier(LuckyTNTLib.MODID, "update_config_values");
+	public static final Identifier NAME = Identifier.of(LuckyTNTLib.MODID, "update_config_values");
 	public static final CustomPayload.Id<UpdateConfigValuesPacket> ID = new CustomPayload.Id<>(NAME);
     public static final PacketCodec<RegistryByteBuf, UpdateConfigValuesPacket> CODEC = PacketCodec.of(UpdateConfigValuesPacket::write, UpdateConfigValuesPacket::new);
 	

@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public class ClientReadyC2SPacket implements CustomPayload {
 	
-	public static final Identifier NAME = new Identifier(LuckyTNTLib.MODID, "client_ready_c2s");
+	public static final Identifier NAME = Identifier.of(LuckyTNTLib.MODID, "client_ready_c2s");
 	public static final CustomPayload.Id<ClientReadyC2SPacket> ID = new CustomPayload.Id<>(NAME);
     public static final PacketCodec<RegistryByteBuf, ClientReadyC2SPacket> CODEC = PacketCodec.of(ClientReadyC2SPacket::write, ClientReadyC2SPacket::new);
 	

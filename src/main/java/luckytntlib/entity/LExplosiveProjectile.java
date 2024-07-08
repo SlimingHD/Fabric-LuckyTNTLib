@@ -39,7 +39,7 @@ public class LExplosiveProjectile extends PersistentProjectileEntity implements 
 	private PrimedTNTEffect effect;
 	
 	public LExplosiveProjectile(EntityType<LExplosiveProjectile> type, World level, PrimedTNTEffect effect) {
-		super(type, level, new ItemStack(Items.CARROT));
+		super(type, 0, 0, 0, level, new ItemStack(Items.CARROT), null);
 		setTNTFuse(effect.getDefaultFuse(this));
 		pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 		this.effect = effect;

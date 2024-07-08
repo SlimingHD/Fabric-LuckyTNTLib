@@ -29,12 +29,12 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.block.MapColor;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -187,12 +187,12 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of a {@link LTNTBlock}
 	 */
 	public Supplier<LTNTBlock> registerTNTBlock(String blockRegistry, @Nullable String itemRegistry, Supplier<LTNTBlock> TNTBlock, TNTBlockRegistryData blockData){
-		LTNTBlock rblock = Registry.register(Registries.BLOCK, new Identifier(blockRegistry, blockData.getRegistryName()), TNTBlock.get());
+		LTNTBlock rblock = Registry.register(Registries.BLOCK, Identifier.of(blockRegistry, blockData.getRegistryName()), TNTBlock.get());
 		Supplier<LTNTBlock> block = () -> rblock;
 		((FireBlock)Blocks.FIRE).registerFlammableBlock(rblock, 15, 100);
 		
 		if(itemRegistry != null && blockData.makeItem()) {
-			Item ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
+			Item ritem = Registry.register(Registries.ITEM, Identifier.of(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
 				
 				@Override
 				public void appendTooltip(ItemStack stack, Item.TooltipContext level, List<Text> components, TooltipType flag) {
@@ -278,12 +278,12 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of a {@link LTNTBlock}
 	 */
 	public Supplier<LTNTBlock> registerLivingTNTBlock(String blockRegistry, @Nullable String itemRegistry, Supplier<LivingLTNTBlock> TNTBlock, TNTBlockRegistryData blockData){
-		LTNTBlock rblock = Registry.register(Registries.BLOCK, new Identifier(blockRegistry, blockData.getRegistryName()), (LTNTBlock)TNTBlock.get());
+		LTNTBlock rblock = Registry.register(Registries.BLOCK, Identifier.of(blockRegistry, blockData.getRegistryName()), (LTNTBlock)TNTBlock.get());
 		Supplier<LTNTBlock> block = () -> rblock;
 		((FireBlock)Blocks.FIRE).registerFlammableBlock(rblock, 15, 100);
 		
 		if(itemRegistry != null && blockData.makeItem()) {
-			Item ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
+			Item ritem = Registry.register(Registries.ITEM, Identifier.of(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
 				
 				@Override
 				public void appendTooltip(ItemStack stack, Item.TooltipContext level, List<Text> components, TooltipType flag) {
@@ -360,7 +360,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of a {@link LDynamiteItem}
 	 */
 	public Supplier<LDynamiteItem> registerDynamiteItem(String itemRegistry, String registryName, Supplier<LDynamiteItem> dynamiteSupplier, String tab, boolean addToLists, boolean addDispenseBehavior){
-		LDynamiteItem ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, registryName), dynamiteSupplier.get());		
+		LDynamiteItem ritem = Registry.register(Registries.ITEM, Identifier.of(itemRegistry, registryName), dynamiteSupplier.get());		
 		Supplier<LDynamiteItem> item = () -> ritem;
 		if(addToLists) {
 			if(dynamiteLists.get(tab) == null) {
@@ -415,7 +415,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of a {@link LTNTMinecartItem}
 	 */
 	public Supplier<LTNTMinecartItem> registerTNTMinecartItem(String itemRegistry, String registryName, Supplier<LTNTMinecartItem> minecartSupplier, String tab, boolean addToLists, boolean addDispenseBehavior){
-		LTNTMinecartItem ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, registryName), minecartSupplier.get());
+		LTNTMinecartItem ritem = Registry.register(Registries.ITEM, Identifier.of(itemRegistry, registryName), minecartSupplier.get());
 		Supplier<LTNTMinecartItem> item = () -> ritem;
 		if(addToLists) {
 			if(minecartLists.get(tab) == null) {
@@ -468,11 +468,11 @@ public class RegistryHelper {
 	 */
 	public Supplier<EntityType<PrimedLTNT>> registerTNTEntity(String entityRegistry, String registryName, PrimedTNTEffect effect, float size, boolean fireImmune){
 		if(fireImmune) {
-			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().dimensions(size, size).build(registryName));
+			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 		else {
-			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(size, size).build(registryName));
+			EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), EntityType.Builder.<PrimedLTNT>create((EntityType<PrimedLTNT> type, World level) -> new PrimedLTNT(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 	}
@@ -485,7 +485,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of an {@link EntityType} of a {@link PrimedLTNT}
 	 */
 	public Supplier<EntityType<PrimedLTNT>> registerTNTEntity(String entityRegistry, String registryName, Supplier<EntityType<PrimedLTNT>> TNT){
-		EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), TNT.get());
+		EntityType<PrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), TNT.get());
 		return () -> rtype;
 	}
 	
@@ -522,7 +522,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of an {@link EntityType} of a {@link LTNTMinecart}
 	 */
 	public Supplier<EntityType<LTNTMinecart>> registerTNTMinecart(String entityRegistry, String registryName, Supplier<EntityType<PrimedLTNT>> TNT, Supplier<Supplier<LTNTMinecartItem>> pickItem, boolean explodesInstantly){		
-		EntityType<LTNTMinecart> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LTNTMinecart>create((EntityType<LTNTMinecart> type, World level) -> new LTNTMinecart(type, level, TNT, pickItem, explodesInstantly), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(0.98f, 0.7f).build(registryName));
+		EntityType<LTNTMinecart> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), EntityType.Builder.<LTNTMinecart>create((EntityType<LTNTMinecart> type, World level) -> new LTNTMinecart(type, level, TNT, pickItem, explodesInstantly), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(0.98f, 0.7f).build(registryName));
 		return () -> rtype;
 	}
 	
@@ -534,7 +534,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of an {@link EntityType} of a {@link LTNTMinecart}
 	 */
 	public Supplier<EntityType<LTNTMinecart>> registerTNTMinecart(String entityRegistry, String registryName, Supplier<EntityType<LTNTMinecart>> minecart){		
-		EntityType<LTNTMinecart> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), minecart.get());
+		EntityType<LTNTMinecart> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), minecart.get());
 		return () -> rtype;
 	}
 	
@@ -558,7 +558,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of an {@link EntityType} of a {@link LivingPrimedLTNT}
 	 */
 	public Supplier<EntityType<LivingPrimedLTNT>> registerLivingTNTEntity(String entityRegistry, String registryName, Supplier<EntityType<LivingPrimedLTNT>> TNT){
-		EntityType<LivingPrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), TNT.get());
+		EntityType<LivingPrimedLTNT> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), TNT.get());
 		return () -> rtype;
 	}
 	
@@ -595,11 +595,11 @@ public class RegistryHelper {
 	 */
 	public Supplier<EntityType<LExplosiveProjectile>> registerExplosiveProjectile(String entityRegistry, String registryName, PrimedTNTEffect effect, float size, boolean fireImmune){
 		if(fireImmune) {
-			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().dimensions(size, size).build(registryName));
+			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).makeFireImmune().dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 		else {
-			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(size, size).build(registryName));
+			EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), EntityType.Builder.<LExplosiveProjectile>create((EntityType<LExplosiveProjectile> type, World level) -> new LExplosiveProjectile(type, level, effect), SpawnGroup.MISC)/*.setShouldReceiveVelocityUpdates(true)*/.maxTrackingRange(64).dimensions(size, size).build(registryName));
 			return () -> rtype;
 		}
 	}
@@ -612,7 +612,7 @@ public class RegistryHelper {
 	 * @return {@link Supplier} of an {@link EntityType} of a {@link LExplosiveProjectile}
 	 */
 	public Supplier<EntityType<LExplosiveProjectile>> registerExplosiveProjectile(String entityRegistry, String registryName, Supplier<EntityType<LExplosiveProjectile>> projectile){
-		EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, new Identifier(entityRegistry, registryName), projectile.get());
+		EntityType<LExplosiveProjectile> rtype = Registry.register(Registries.ENTITY_TYPE, Identifier.of(entityRegistry, registryName), projectile.get());
 		return () -> rtype;
 	}
 }

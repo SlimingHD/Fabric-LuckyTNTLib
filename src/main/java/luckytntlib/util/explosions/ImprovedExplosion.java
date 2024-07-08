@@ -13,18 +13,21 @@ import luckytntlib.util.IExplosiveEntity;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.ProtectionEnchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.EntityExplosionBehavior;
@@ -527,7 +530,7 @@ public class ImprovedExplosion extends Explosion {
 					}
 					double knockback = damage;
 					if(entity instanceof LivingEntity lEnt) {
-						knockback = ProtectionEnchantment.transformExplosionKnockback(lEnt, damage);
+						knockback = transformExplosionKnockback(lEnt, damage);
 					}
 					entity.setVelocity(entity.getVelocity().add(offX * knockback * knockbackStrength, offY * knockback * knockbackStrength, offZ * knockback * knockbackStrength));
 					if(entity instanceof PlayerEntity) {
@@ -557,6 +560,15 @@ public class ImprovedExplosion extends Explosion {
 				}
 			}
 		}
+	}
+	
+	public static double transformExplosionKnockback(LivingEntity entity, double velocity) {
+		int i = EnchantmentHelper.getEquipmentLevel(entity.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.KNOCKBACK), entity);
+		if (i > 0) {
+			velocity *= MathHelper.clamp(1.0 - (double) i * 0.15, 0.0, 1.0);
+		}
+
+		return velocity;
 	}
 	
 	@Nullable
