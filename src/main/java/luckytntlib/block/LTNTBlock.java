@@ -76,17 +76,16 @@ public class LTNTBlock extends TntBlock{
 	}
 
 	@Override
-	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		if (!world.isClient() && !player.isCreative() && state.get(UNSTABLE).booleanValue()) {
 			explode(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
 		}
 		
 		spawnBreakParticles(world, player, pos, state);
-        if (state.isIn(BlockTags.GUARDED_BY_PIGLINS)) {
-            PiglinBrain.onGuardedBlockInteracted(player, false);
-        }
-        world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(player, state));
-        return state;
+		if (state.isIn(BlockTags.GUARDED_BY_PIGLINS)) {
+			PiglinBrain.onGuardedBlockInteracted(player, false);
+		}
+		world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(player, state));
 	}
 	
 	@Override
@@ -148,7 +147,7 @@ public class LTNTBlock extends TntBlock{
 		ItemStack itemStack = player.getStackInHand(hand);
 		if (itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.FIRE_CHARGE)) {
 			explode(world, false, pos.getX(), pos.getY(), pos.getZ(), player);
-			world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL_AND_REDRAW);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 			Item item = itemStack.getItem();
 			if (!player.isCreative()) {
 				if (itemStack.isOf(Items.FLINT_AND_STEEL)) {

@@ -19,9 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -122,7 +120,7 @@ public class ImprovedExplosion extends Explosion {
 	 * @param size  the rough size of the explosion, which must not be greater than 511 in most cases
 	 */	
 	public ImprovedExplosion(World level, @Nullable Entity explodingEntity, @Nullable DamageSource source, double x, double y, double z, int size) {
-		super(level, explodingEntity, source, null, x, y, z, size, false, DestructionType.KEEP, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE);
+		super(level, explodingEntity, source, null, x, y, z, size, false, DestructionType.KEEP);
 		this.level = level;
 		this.posX = x;
 		this.posY = y;
@@ -145,7 +143,7 @@ public class ImprovedExplosion extends Explosion {
 	 * @param size  the rough size of the explosion, which must not be greater than 511 in most cases
 	 */	
 	public ImprovedExplosion(World level, @Nullable Entity explodingEntity, @Nullable DamageSource source, SoundEvent sound, double x, double y, double z, int size) {
-		super(level, explodingEntity, source, null, x, y, z, size, false, DestructionType.KEEP, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, sound);
+		super(level, explodingEntity, source, null, x, y, z, size, false, DestructionType.KEEP);
 		this.level = level;
 		this.posX = x;
 		this.posY = y;
@@ -509,7 +507,7 @@ public class ImprovedExplosion extends Explosion {
 	public void doEntityExplosion(float knockbackStrength, boolean damageEntities) {
 		List<Entity> entities = level.getOtherEntities(getEntity(), new Box(posX - size * 2, posY - size * 2, posZ - size * 2, posX + size * 2, posY + size * 2, posZ + size * 2));
 		for(Entity entity : entities) {
-			if(!entity.isImmuneToExplosion(this)) {
+			if(!entity.isImmuneToExplosion()) {
 				double distance = Math.sqrt(entity.squaredDistanceTo(getPosition())) / (size * 2);
 				if(distance <= 1f) {
 					double offX = (entity.getX() - posX);
@@ -549,7 +547,7 @@ public class ImprovedExplosion extends Explosion {
 	public void doEntityExplosion(IForEachEntityExplosionEffect entityEffect) {
 		List<Entity> entities = level.getOtherEntities(getEntity(), new Box(posX - size * 2, posY - size * 2, posZ - size * 2, posX + size * 2, posY + size * 2, posZ + size * 2));
 		for(Entity entity : entities) {
-			if(!entity.isImmuneToExplosion(this)) {
+			if(!entity.isImmuneToExplosion()) {
 				double distance = Math.sqrt(entity.squaredDistanceTo(getPosition())) / (size * 2);
 				if(distance < 1f && distance != 0) {
 					entityEffect.doEntityExplosion(entity, distance);
@@ -565,6 +563,10 @@ public class ImprovedExplosion extends Explosion {
 			return ent.owner();
 		}
 		return super.getCausingEntity();
+	}
+	
+	public Vec3d getPosition() {
+		return new Vec3d(posX, posY, posZ);
 	}
 	
 	/**

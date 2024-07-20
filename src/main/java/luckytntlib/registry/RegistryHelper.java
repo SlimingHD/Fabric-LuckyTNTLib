@@ -23,12 +23,12 @@ import luckytntlib.item.LTNTMinecartItem;
 import luckytntlib.item.LuckyDynamiteItem;
 import luckytntlib.network.LuckyTNTPacket;
 import luckytntlib.util.dispenser.DispenserBehaviorHelper;
+import luckytntlib.util.mixin.FireBlockExtension;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FireBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
@@ -189,7 +189,9 @@ public class RegistryHelper {
 	public Supplier<LTNTBlock> registerTNTBlock(String blockRegistry, @Nullable String itemRegistry, Supplier<LTNTBlock> TNTBlock, TNTBlockRegistryData blockData){
 		LTNTBlock rblock = Registry.register(Registries.BLOCK, new Identifier(blockRegistry, blockData.getRegistryName()), TNTBlock.get());
 		Supplier<LTNTBlock> block = () -> rblock;
-		((FireBlock)Blocks.FIRE).registerFlammableBlock(rblock, 15, 100);
+		if(Blocks.FIRE instanceof FireBlockExtension exten) {
+			exten.registerBurnableBlock(rblock, 15, 100);
+		}
 		
 		if(itemRegistry != null && blockData.makeItem()) {
 			Item ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {
@@ -280,7 +282,9 @@ public class RegistryHelper {
 	public Supplier<LTNTBlock> registerLivingTNTBlock(String blockRegistry, @Nullable String itemRegistry, Supplier<LivingLTNTBlock> TNTBlock, TNTBlockRegistryData blockData){
 		LTNTBlock rblock = Registry.register(Registries.BLOCK, new Identifier(blockRegistry, blockData.getRegistryName()), (LTNTBlock)TNTBlock.get());
 		Supplier<LTNTBlock> block = () -> rblock;
-		((FireBlock)Blocks.FIRE).registerFlammableBlock(rblock, 15, 100);
+		if(Blocks.FIRE instanceof FireBlockExtension exten) {
+			exten.registerBurnableBlock(rblock, 15, 100);
+		}
 		
 		if(itemRegistry != null && blockData.makeItem()) {
 			Item ritem = Registry.register(Registries.ITEM, new Identifier(itemRegistry, blockData.getRegistryName()), new BlockItem(block.get(), new Item.Settings()) {

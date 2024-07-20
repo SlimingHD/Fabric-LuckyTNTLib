@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 
 import luckytntlib.config.common.ConfigScreenFactory;
 import luckytntlib.registry.RegistryHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.GridWidget;
@@ -43,6 +44,12 @@ public class ConfigScreenListScreen extends Screen {
     @Override
     protected void initTabNavigation() {
         layout.refreshPositions();
+    }
+    
+    @Override
+    public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+    	renderBackgroundTexture(ctx);
+    	super.render(ctx, mouseX, mouseY, delta);
     }
     
     protected void openScreen(Screen screen) {

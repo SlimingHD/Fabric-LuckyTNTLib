@@ -2,11 +2,13 @@ package luckytntlib.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import luckytntlib.block.LTNTBlock;
+import luckytntlib.util.mixin.FireBlockExtension;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,7 +23,10 @@ import net.minecraft.world.WorldAccess;
  * This Mixin ensures that TNT is turning into the correct TNT when it's lit by fire
  */
 @Mixin(FireBlock.class)
-public abstract class FireBlockMixin {
+public abstract class FireBlockMixin implements FireBlockExtension {
+	
+	@Shadow
+	protected abstract void registerFlammableBlock(Block block, int burnChance, int spreadChance);
 	
 	@Shadow
 	protected abstract BlockState getStateWithAge(WorldAccess world, BlockPos pos, int age);
@@ -57,5 +62,10 @@ public abstract class FireBlockMixin {
             }
         }
         ci.cancel();
+	}
+
+	@Unique
+	public void registerBurnableBlock(Block block, int burnChance, int spreadChance) {
+		registerFlammableBlock(block, burnChance, spreadChance);
 	}
 }

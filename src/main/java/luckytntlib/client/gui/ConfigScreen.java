@@ -10,10 +10,12 @@ import luckytntlib.config.LuckyTNTLibConfigValues;
 import luckytntlib.config.common.Config;
 import luckytntlib.config.common.Config.ConfigValue;
 import luckytntlib.network.UpdateConfigValuesPacket;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.widget.AxisGridWidget;
+import net.minecraft.client.gui.widget.AxisGridWidget.DisplayAxis;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.client.gui.widget.GridWidget.Adder;
 import net.minecraft.client.gui.widget.Positioner;
@@ -43,8 +45,8 @@ public class ConfigScreen extends Screen {
 	
 	@Override
 	public void init() {
-		DirectionalLayoutWidget linear = layout.addHeader(DirectionalLayoutWidget.vertical());
-		linear.add(new TextWidget(Text.translatable("config.title"), textRenderer), Positioner::alignHorizontalCenter);
+		AxisGridWidget linear = layout.addHeader(new AxisGridWidget(0, 0, DisplayAxis.VERTICAL));
+		linear.add(new TextWidget(Text.translatable("config.title"), textRenderer), new Positioner.Impl().alignHorizontalCenter());
 		GridWidget grid = new GridWidget();
 		
 		grid.getMainPositioner().marginX(4).marginBottom(4).alignHorizontalCenter();
@@ -69,6 +71,12 @@ public class ConfigScreen extends Screen {
     @Override
     protected void initTabNavigation() {
         layout.refreshPositions();
+    }
+    
+    @Override
+    public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+    	renderBackgroundTexture(ctx);
+    	super.render(ctx, mouseX, mouseY, delta);
     }
 	
 	@Override

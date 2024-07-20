@@ -16,10 +16,10 @@ public class CenteredStringWidget extends TextWidget {
 	}
 
 	@Override
-	public void renderWidget(DrawContext graphics, int i1, int i2, float f) {
+	public void renderButton(DrawContext graphics, int i1, int i2, float f) {
 		graphics.getMatrices().push();
 		graphics.getMatrices().translate(0f, 6f, 0f);
-		super.renderWidget(graphics, i1, i2, f);
+		super.renderButton(graphics, i1, i2, f);
 		graphics.getMatrices().pop();
 	}
 }

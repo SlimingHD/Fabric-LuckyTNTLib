@@ -25,12 +25,12 @@ import net.minecraft.block.TntBlock;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 public class LuckyTNTLib implements ModInitializer {
@@ -61,16 +61,16 @@ public class LuckyTNTLib implements ModInitializer {
 
 			@Override
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-				ServerWorld world = pointer.world();
+				World world = pointer.getWorld();
 				setSuccess(true);
-				Direction direction = pointer.state().get(DispenserBlock.FACING);
-				BlockPos blockPos = pointer.pos().offset(direction);
+				Direction direction = pointer.getBlockState().get(DispenserBlock.FACING);
+				BlockPos blockPos = pointer.getPos().offset(direction);
 				BlockState blockState = world.getBlockState(blockPos);
 				if (AbstractFireBlock.canPlaceAt(world, blockPos, direction)) {
 					world.setBlockState(blockPos, AbstractFireBlock.getState(world, blockPos));
 					world.emitGameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
 				} else if (CampfireBlock.canBeLit(blockState) || CandleBlock.canBeLit(blockState) || CandleCakeBlock.canBeLit(blockState)) {
-					world.setBlockState(blockPos, (BlockState) blockState.with(Properties.LIT, true));
+					world.setBlockState(blockPos, blockState.with(Properties.LIT, Boolean.valueOf(true)));
 					world.emitGameEvent(null, GameEvent.BLOCK_CHANGE, blockPos);
 				} else if (blockState.getBlock() instanceof TntBlock tnt) {
 					if(tnt instanceof LTNTBlock ltnt) {
@@ -82,9 +82,11 @@ public class LuckyTNTLib implements ModInitializer {
 				} else {
 					setSuccess(false);
 				}
+
 				if (isSuccess() && stack.damage(1, world.random, null)) {
 					stack.setCount(0);
 				}
+
 				return stack;
 			}
 		});

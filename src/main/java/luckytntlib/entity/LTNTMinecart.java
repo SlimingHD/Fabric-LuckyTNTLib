@@ -119,10 +119,10 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	}
 	
 	@Override
-	public void killAndDropSelf(DamageSource source) {
+	public void dropItems(DamageSource source) {
 		double speed = getVelocity().horizontalLengthSquared();
 		if (!source.isOf(DamageTypes.ON_FIRE) && !source.isOf(DamageTypes.EXPLOSION) && !(speed >= 0.01f)) {
-			super.killAndDropSelf(source);
+			super.dropItems(source);
 		} else {
 			if(getTNTFuse() < 0) {
 				if(explodesInstantly()) {
@@ -186,7 +186,7 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	}
 	
 	@Override
-	protected Item asItem() {
+	protected Item getItem() {
 		return pickItem.get().get();
 	}
 	
