@@ -12,6 +12,7 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.enums.RailShape;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPointer;
@@ -100,7 +101,7 @@ public class DispenserBehaviorHelper {
 				}
 
 				LTNTMinecart cart = item.createMinecart(level, x, y + railHeight, z, null);
-				if (stack.hasCustomName()) {
+				if (stack.contains(DataComponentTypes.CUSTOM_NAME) && stack.get(DataComponentTypes.CUSTOM_NAME) != null && !stack.get(DataComponentTypes.CUSTOM_NAME).getString().equals("")) {
 					cart.setCustomName(stack.getName());
 				}
 				stack.decrement(1);

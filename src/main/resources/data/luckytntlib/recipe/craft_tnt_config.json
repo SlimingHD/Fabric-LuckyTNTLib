@@ -14,7 +14,7 @@
 		}
 	},
 	"result": {
-		"item": "luckytntlib:tnt_config",
+		"id": "luckytntlib:tnt_config",
 		"count": 1
 	}
 }

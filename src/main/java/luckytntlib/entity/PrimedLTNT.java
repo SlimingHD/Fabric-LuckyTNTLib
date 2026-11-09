@@ -46,9 +46,9 @@ public class PrimedLTNT extends TntEntity implements IExplosiveEntity{
 	}
 	
 	@Override
-    public void initDataTracker() {
-		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
-		super.initDataTracker();
+    public void initDataTracker(DataTracker.Builder builder) {
+		builder.add(PERSISTENT_DATA, new NbtCompound());
+		super.initDataTracker(builder);
 	}
 	
 	@Override

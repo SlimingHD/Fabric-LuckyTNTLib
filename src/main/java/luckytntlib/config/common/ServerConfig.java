@@ -54,7 +54,7 @@ public class ServerConfig extends Config {
 			if(!packetCreator.isEmpty()) {
 				for(ServerWorld sw : sworld.getServer().getWorlds()) {
 					for(ServerPlayerEntity player : sw.getPlayers()) {
-						ServerPlayNetworking.send(player, packetCreator.get().getPacket(configValues).getName(), packetCreator.get().getPacket(configValues).toByteBuf());
+						ServerPlayNetworking.send(player, packetCreator.get().getPacket(configValues));
 					}
 				}
 			}

@@ -17,7 +17,7 @@ public class ItemRegistry {
 	public static final Supplier<Item> CONFIG_ITEM = registerItem("tnt_config", new TNTConfigItem());
 
 	public static Supplier<Item> registerItem(String name, Item item) {
-		Item ritem = Registry.register(Registries.ITEM, new Identifier(LuckyTNTLib.MODID, name), item);
+		Item ritem = Registry.register(Registries.ITEM, Identifier.of(LuckyTNTLib.MODID, name), item);
 		return () -> ritem;
 	}
 	

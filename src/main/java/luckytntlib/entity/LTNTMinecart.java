@@ -165,10 +165,10 @@ public class LTNTMinecart extends MinecartEntity implements IExplosiveEntity{
 	}
 	
 	@Override
-	public void initDataTracker() {
-		dataTracker.startTracking(DATA_FUSE_ID, -1);
-		dataTracker.startTracking(PERSISTENT_DATA, new NbtCompound());
-		super.initDataTracker();
+	public void initDataTracker(DataTracker.Builder builder) {
+		builder.add(DATA_FUSE_ID, -1);
+		builder.add(PERSISTENT_DATA, new NbtCompound());
+		super.initDataTracker(builder);
 	}
 	
 	@Nullable

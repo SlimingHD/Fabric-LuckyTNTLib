@@ -1,10 +1,10 @@
 {
 	"required": true,
 	"package": "luckytntlib.mixin",
-	"compatibilityLevel": "JAVA_17",
+	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"FireBlockMixin",
-		"EntityMixin"
+		"EntityMixin",
+		"FireBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
