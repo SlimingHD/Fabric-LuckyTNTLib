@@ -2,6 +2,8 @@ package luckytntlib.util.explosions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +32,8 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.explosion.ExplosionImpl;
 import net.minecraft.world.explosion.EntityExplosionBehavior;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
@@ -41,15 +45,61 @@ import net.minecraft.world.explosion.ExplosionBehavior;
  * Similar to Minecraft's explosion it is also raycasted, making it evaluate every block in its path.
  * Due to an improved algorithm, no block drops and no particles it also is more performant, making it best suited for humongous explosions.
  */
-public class ImprovedExplosion extends Explosion {
+public class ImprovedExplosion implements Explosion {
 
 	public final World level;
 	public final double posX, posY, posZ;
 	public final int size;
 	public final ExplosionBehavior damageCalculator;
 	public final DamageSource damageSource;
+	@Nullable private final Entity explodingEntity;
+	private final Map<PlayerEntity, Vec3d> affectedPlayers = new HashMap<>();
 	List<Integer> affectedBlocks = new ArrayList<>();
 	
+
+	@Override
+	public ServerWorld getWorld() {
+		if (level instanceof ServerWorld serverWorld) {
+			return serverWorld;
+		}
+		throw new IllegalStateException("ImprovedExplosion requires a ServerWorld");
+	}
+
+	@Override
+	@Nullable
+	public Entity getEntity() {
+		return explodingEntity;
+	}
+
+	@Override
+	public Vec3d getPosition() {
+		return new Vec3d(posX, posY, posZ);
+	}
+
+	@Override
+	public float getPower() {
+		return size;
+	}
+
+	@Override
+	public Explosion.DestructionType getDestructionType() {
+		return Explosion.DestructionType.KEEP;
+	}
+
+	@Override
+	public boolean canTriggerBlocks() {
+		return false;
+	}
+
+	@Override
+	public boolean preservesDecorativeEntities() {
+		return false;
+	}
+
+	public Map<PlayerEntity, Vec3d> getAffectedPlayers() {
+		return affectedPlayers;
+	}
+
 	private static ImprovedExplosion dummyExplosion;
 	
 	/**
@@ -126,13 +176,13 @@ public class ImprovedExplosion extends Explosion {
 	 * @param size  the rough size of the explosion, which must not be greater than 511 in most cases
 	 */	
 	public ImprovedExplosion(World level, @Nullable Entity explodingEntity, @Nullable DamageSource source, double x, double y, double z, int size) {
-		super(level, explodingEntity, source, null, x, y, z, size, false, DestructionType.KEEP, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE);
 		this.level = level;
+		this.explodingEntity = explodingEntity;
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;
 		this.size = size;
-		this.damageSource = source == null ? level.getDamageSources().explosion(this) : source;
+		this.damageSource = source == null ? Explosion.createDamageSource(level, explodingEntity) : source;
 		damageCalculator = explodingEntity == null ? new ExplosionBehavior() : new EntityExplosionBehavior(explodingEntity);
 	}
 	
@@ -149,8 +199,8 @@ public class ImprovedExplosion extends Explosion {
 	 * @param size  the rough size of the explosion, which must not be greater than 511 in most cases
 	 */	
 	public ImprovedExplosion(World level, @Nullable Entity explodingEntity, @Nullable DamageSource source, SoundEvent sound, double x, double y, double z, int size) {
-		super(level, explodingEntity, source, null, x, y, z, size, false, DestructionType.KEEP, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, RegistryEntry.of(sound));
 		this.level = level;
+		this.explodingEntity = explodingEntity;
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;
@@ -215,13 +265,13 @@ public class ImprovedExplosion extends Explosion {
 		affectedBlocks.addAll(blocks);
 		for(int intPos : blocks) {
 			BlockPos pos = decodeBlockPos(intPos).add(posTNT);
-			level.getBlockState(pos).getBlock().onDestroyedByExplosion(level, pos, this);
+			level.getBlockState(pos).getBlock().onDestroyedByExplosion(getWorld(), pos, this);
 			level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 		if(fire) {
 			for(int intPos : blocks) {
 				BlockPos pos = decodeBlockPos(intPos).add(posTNT);
-				if(Math.random() > 0.75f && level.getBlockState(pos).isAir() && level.getBlockState(pos.down()).isOpaqueFullCube(level, pos)) {
+				if(Math.random() > 0.75f && level.getBlockState(pos).isAir() && level.getBlockState(pos.down()).isOpaqueFullCube()) {
 					level.setBlockState(pos, AbstractFireBlock.getState(level, pos));
 				}
 			}
@@ -523,10 +573,10 @@ public class ImprovedExplosion extends Explosion {
 					offX /= distance2;
 					offY /= distance2;
 					offZ /= distance2;
-					double seenPercent = getExposure(getPosition(), entity);
+					double seenPercent = ExplosionImpl.calculateReceivedDamage(getPosition(), entity);
 					float damage = (1f - (float)distance) * (float)seenPercent;
 					if(damageEntities) {
-						entity.damage(damageSource, (damage * damage + damage) / 2f * 7 * size + 1f);
+						entity.damage(getWorld(), damageSource, (damage * damage + damage) / 2f * 7 * size + 1f);
 					}
 					double knockback = damage;
 					if(entity instanceof LivingEntity lEnt) {
@@ -535,7 +585,7 @@ public class ImprovedExplosion extends Explosion {
 					entity.setVelocity(entity.getVelocity().add(offX * knockback * knockbackStrength, offY * knockback * knockbackStrength, offZ * knockback * knockbackStrength));
 					if(entity instanceof PlayerEntity) {
 						PlayerEntity player = (PlayerEntity)entity;
-						player.velocityModified = true;
+						player.velocityDirty = true;
 						if(!player.isSpectator() && (!player.isCreative() || !player.getAbilities().flying)) {
 							getAffectedPlayers().put(player, new Vec3d(offX * damage, offY * damage, offZ * damage));
 						}
@@ -563,7 +613,7 @@ public class ImprovedExplosion extends Explosion {
 	}
 	
 	public static double transformExplosionKnockback(LivingEntity entity, double velocity) {
-		int i = EnchantmentHelper.getEquipmentLevel(entity.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.KNOCKBACK), entity);
+		int i = EnchantmentHelper.getEquipmentLevel(entity.getWorld().getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).entryOf(Enchantments.KNOCKBACK), entity);
 		if (i > 0) {
 			velocity *= MathHelper.clamp(1.0 - (double) i * 0.15, 0.0, 1.0);
 		}
@@ -577,7 +627,7 @@ public class ImprovedExplosion extends Explosion {
 		if(getEntity() instanceof IExplosiveEntity ent) {
 			return ent.owner();
 		}
-		return super.getCausingEntity();
+		return Explosion.getCausingEntity(getEntity());
 	}
 	
 	/**
@@ -598,17 +648,14 @@ public class ImprovedExplosion extends Explosion {
 		return dummyExplosion == null ? dummyExplosion = new ImprovedExplosion(level, new Vec3d(0, 0, 0), 0) : dummyExplosion;
 	}
 
-	@Override
 	@Deprecated
 	public void collectBlocksAndDamageEntities() {
 	}
 	
-	@Override
 	@Deprecated
 	public void affectWorld(boolean spawnParticles) {		
 	}
 	
-	@Override
 	@Nullable
 	public List<BlockPos> getAffectedBlocks() {
 		List<BlockPos> blocks = new ArrayList<>();
